@@ -1,0 +1,1458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EduPortal — BCA IV Sec D</title>
+<link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════
+   DESIGN SYSTEM
+══════════════════════════════════════ */
+:root {
+  --bg:       #060910;
+  --surface:  #0c1118;
+  --card:     #101720;
+  --lift:     #141d28;
+  --border:   rgba(255,255,255,0.06);
+  --border2:  rgba(255,255,255,0.11);
+
+  --blue:     #3b82f6;
+  --blue-dim: rgba(59,130,246,0.15);
+  --cyan:     #22d3ee;
+  --emerald:  #10b981;
+  --amber:    #f59e0b;
+  --rose:     #f43f5e;
+  --violet:   #8b5cf6;
+
+  --text:     #eef2f8;
+  --text2:    #8899b4;
+  --text3:    #4a5a72;
+
+  --font:     'Cabinet Grotesk', sans-serif;
+  --mono:     'JetBrains Mono', monospace;
+  --serif:    'Instrument Serif', serif;
+
+  --r-sm:  10px;
+  --r-md:  16px;
+  --r-lg:  22px;
+  --r-xl:  28px;
+  --r-full: 999px;
+
+  --shadow-glow-blue: 0 0 40px rgba(59,130,246,0.18);
+  --shadow-card: 0 8px 32px rgba(0,0,0,0.4);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── scrollbar ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 4px; }
+
+/* ── page system ── */
+.page { display: none; min-height: 100vh; }
+.page.active { display: flex; flex-direction: column; }
+
+/* ══════════════════════════════════════
+   ANIMATED BG MESH
+══════════════════════════════════════ */
+.mesh {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+}
+.mesh-blob {
+  position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.4;
+  animation: drift 18s ease-in-out infinite alternate;
+}
+.mb1 { width: 600px; height: 600px; top: -200px; right: -100px; background: radial-gradient(circle, rgba(59,130,246,0.2), transparent 65%); animation-delay: 0s; }
+.mb2 { width: 500px; height: 500px; bottom: -150px; left: -80px; background: radial-gradient(circle, rgba(16,185,129,0.15), transparent 65%); animation-delay: -6s; }
+.mb3 { width: 400px; height: 400px; top: 40%; left: 40%; background: radial-gradient(circle, rgba(139,92,246,0.1), transparent 65%); animation-delay: -12s; }
+@keyframes drift {
+  from { transform: translate(0,0) scale(1); }
+  to   { transform: translate(30px, 40px) scale(1.08); }
+}
+
+/* ══════════════════════════════════════
+   AUTH PAGES (Login / Signup)
+══════════════════════════════════════ */
+#loginPage, #signupPage {
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  position: relative;
+}
+
+.auth-wrap {
+  width: 100%;
+  max-width: 460px;
+  position: relative;
+  z-index: 1;
+  animation: authIn .5s cubic-bezier(.34,1.4,.64,1) both;
+}
+@keyframes authIn {
+  from { opacity:0; transform: translateY(28px) scale(.96); }
+  to   { opacity:1; transform: translateY(0) scale(1); }
+}
+
+/* brand header */
+.auth-brand {
+  text-align: center;
+  margin-bottom: 32px;
+}
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.brand-icon {
+  width: 48px; height: 48px;
+  background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+  box-shadow: 0 6px 20px rgba(59,130,246,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+}
+.brand-name {
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #fff 40%, #93c5fd);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.auth-tagline {
+  font-size: 13px;
+  color: var(--text2);
+  margin-top: 6px;
+}
+
+/* card */
+.auth-card {
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-radius: var(--r-xl);
+  padding: 36px 32px;
+  box-shadow: var(--shadow-card), 0 0 0 1px rgba(255,255,255,0.03), var(--shadow-glow-blue);
+  position: relative;
+  overflow: hidden;
+}
+.auth-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(59,130,246,0.5), transparent);
+}
+
+.auth-card-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 4px;
+  letter-spacing: -0.4px;
+}
+.auth-card-sub {
+  font-size: 13px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* gmail btn */
+.gmail-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 13px 20px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border2);
+  border-radius: var(--r-md);
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 700;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: all .2s;
+  margin-bottom: 24px;
+}
+.gmail-btn:hover {
+  background: rgba(255,255,255,0.09);
+  border-color: rgba(255,255,255,0.18);
+  transform: translateY(-1px);
+}
+.gmail-icon {
+  width: 20px; height: 20px;
+  background: linear-gradient(135deg,#ea4335,#fbbc05,#34a853,#4285f4);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 900; color: white;
+  flex-shrink: 0;
+}
+
+.divider-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.divider-line { flex: 1; height: 1px; background: var(--border); }
+.divider-text { font-size: 11px; color: var(--text3); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+
+/* fields */
+.f-group { margin-bottom: 16px; }
+.f-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--text2);
+  margin-bottom: 7px;
+}
+.f-input-wrap { position: relative; }
+.f-icon {
+  position: absolute;
+  left: 14px; top: 50%;
+  transform: translateY(-50%);
+  font-size: 15px;
+  pointer-events: none;
+  opacity: 0.5;
+}
+.f-input {
+  width: 100%;
+  padding: 13px 14px 13px 42px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: var(--r-md);
+  color: var(--text);
+  font-size: 14px;
+  font-family: var(--font);
+  outline: none;
+  transition: border-color .2s, box-shadow .2s, background .2s;
+}
+.f-input:focus {
+  border-color: rgba(59,130,246,0.5);
+  background: rgba(59,130,246,0.04);
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+}
+.f-input::placeholder { color: rgba(255,255,255,0.18); }
+
+/* password eye */
+.f-eye {
+  position: absolute;
+  right: 14px; top: 50%;
+  transform: translateY(-50%);
+  background: none; border: none;
+  color: var(--text3); cursor: pointer;
+  font-size: 16px; padding: 2px;
+  transition: color .2s;
+}
+.f-eye:hover { color: var(--text2); }
+
+/* row */
+.f-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+/* error */
+.auth-error {
+  display: none;
+  background: rgba(244,63,94,0.1);
+  border: 1px solid rgba(244,63,94,0.25);
+  border-radius: var(--r-sm);
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #fda4af;
+  margin-bottom: 16px;
+}
+.auth-error.show { display: block; }
+
+/* success */
+.auth-success {
+  display: none;
+  background: rgba(16,185,129,0.1);
+  border: 1px solid rgba(16,185,129,0.25);
+  border-radius: var(--r-sm);
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #6ee7b7;
+  margin-bottom: 16px;
+}
+.auth-success.show { display: block; }
+
+/* primary btn */
+.btn-primary {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: var(--r-md);
+  background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 800;
+  font-family: var(--font);
+  cursor: pointer;
+  letter-spacing: 0.3px;
+  transition: all .2s;
+  box-shadow: 0 4px 20px rgba(59,130,246,0.35);
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+  opacity: 0;
+  transition: opacity .2s;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(59,130,246,0.45); }
+.btn-primary:hover::after { opacity: 1; }
+.btn-primary:active { transform: translateY(0); }
+.btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+.auth-footer {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 13px;
+  color: var(--text2);
+}
+.auth-link {
+  color: var(--blue);
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  border: none; background: none;
+  font-family: var(--font);
+  font-size: 13px;
+}
+.auth-link:hover { text-decoration: underline; }
+
+/* ══════════════════════════════════════
+   MAIN PORTAL
+══════════════════════════════════════ */
+#portalPage {
+  min-height: 100vh;
+  position: relative;
+}
+
+/* ── TOP NAV ── */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(6,9,16,0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.nav-icon {
+  width: 34px; height: 34px;
+  background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+}
+.nav-title {
+  font-size: 16px;
+  font-weight: 900;
+  background: linear-gradient(135deg, #fff 40%, #93c5fd);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.3px;
+}
+.nav-sub { font-size: 11px; color: var(--text3); margin-top: 1px; font-weight: 500; }
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.nav-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--lift);
+  border: 1px solid var(--border);
+  border-radius: var(--r-full);
+  padding: 5px 14px 5px 5px;
+  cursor: pointer;
+  transition: background .2s;
+}
+.nav-user:hover { background: rgba(255,255,255,0.07); }
+.nav-avatar {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1d4ed8, #8b5cf6);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 800; color: #fff;
+  flex-shrink: 0;
+}
+.nav-uname { font-size: 13px; font-weight: 600; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nav-logout {
+  background: none; border: none;
+  color: var(--text3);
+  font-family: var(--font);
+  font-size: 13px;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: var(--r-sm);
+  transition: color .2s, background .2s;
+}
+.nav-logout:hover { color: var(--rose); background: rgba(244,63,94,0.08); }
+
+/* ── HERO ── */
+.hero {
+  position: relative;
+  z-index: 1;
+  padding: 52px 24px 40px;
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto;
+}
+.hero-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(59,130,246,0.1);
+  border: 1px solid rgba(59,130,246,0.2);
+  border-radius: var(--r-full);
+  padding: 5px 14px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #93c5fd;
+  margin-bottom: 18px;
+}
+.hero-pill::before { content: '●'; color: var(--blue); animation: pulse 2s ease infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+.hero-title {
+  font-size: clamp(28px, 5vw, 44px);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -1px;
+  margin-bottom: 12px;
+}
+.hero-title .hl {
+  font-family: var(--serif);
+  font-style: italic;
+  background: linear-gradient(135deg, #60a5fa, #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero-desc {
+  font-size: 15px;
+  color: var(--text2);
+  line-height: 1.6;
+  max-width: 480px;
+  margin: 0 auto 28px;
+}
+
+/* stats row */
+.stats-row {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.stat-chip {
+  background: var(--lift);
+  border: 1px solid var(--border);
+  border-radius: var(--r-full);
+  padding: 8px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text2);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.stat-chip .num { color: #fff; font-weight: 800; }
+
+/* ── SECTION HEADERS ── */
+.content-wrap {
+  position: relative;
+  z-index: 1;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 20px 80px;
+}
+.sec-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+  margin-top: 36px;
+}
+.sec-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.sec-label.lab { color: #60a5fa; }
+.sec-label.theory { color: #34d399; }
+.sec-line { flex: 1; height: 1px; background: var(--border); }
+.sec-count {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text3);
+  white-space: nowrap;
+}
+
+/* ── EXAM CARDS ── */
+.exam-grid { display: flex; flex-direction: column; gap: 10px; }
+
+.xcard {
+  display: grid;
+  grid-template-columns: 76px 1fr;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform .2s, box-shadow .2s, border-color .2s;
+  animation: cardIn .5s ease both;
+  position: relative;
+  background: var(--card);
+}
+@keyframes cardIn { from{opacity:0;transform:translateX(-12px)} to{opacity:1;transform:translateX(0)} }
+.xcard:nth-child(1){animation-delay:.05s} .xcard:nth-child(2){animation-delay:.10s}
+.xcard:nth-child(3){animation-delay:.15s} .xcard:nth-child(4){animation-delay:.20s}
+.xcard:nth-child(5){animation-delay:.25s}
+
+.xcard:hover { transform: translateY(-3px); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+.xcard.lab:hover { border-color: rgba(59,130,246,0.35); box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 0 1px rgba(59,130,246,0.1); }
+.xcard.theory:hover { border-color: rgba(16,185,129,0.3); box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 0 1px rgba(16,185,129,0.08); }
+
+/* date col */
+.xcard-date {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 18px 8px;
+}
+.xcard.lab .xcard-date {
+  background: linear-gradient(160deg, #0c2554, #1a4a8a);
+  border-right: 1px solid rgba(59,130,246,0.2);
+}
+.xcard.theory .xcard-date {
+  background: linear-gradient(160deg, #061a0e, #0e3320);
+  border-right: 1px solid rgba(16,185,129,0.15);
+}
+.xd-num { font-family: var(--mono); font-size: 26px; font-weight: 600; color: #fff; line-height: 1; }
+.xd-mo { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-top: 3px; }
+.xd-day { font-size: 9px; color: rgba(255,255,255,0.28); margin-top: 2px; text-transform: uppercase; letter-spacing: 1px; }
+
+/* body */
+.xcard-body {
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.xcard-info { flex: 1; min-width: 0; }
+.xcard-code {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+.xcard.lab .xcard-code { color: #60a5fa; }
+.xcard.theory .xcard-code { color: #34d399; }
+
+.xcard-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 5px;
+  line-height: 1.3;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.xcard-time { font-size: 12px; color: var(--text2); display: flex; align-items: center; gap: 6px; }
+.xcard-saved {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(16,185,129,0.1);
+  border: 1px solid rgba(16,185,129,0.2);
+  border-radius: var(--r-full);
+  padding: 2px 8px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #34d399;
+  margin-left: 6px;
+}
+
+.xcard-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.xcard-tag {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: var(--r-full);
+}
+.xcard.lab .xcard-tag { background: rgba(59,130,246,0.12); color: #93c5fd; border: 1px solid rgba(59,130,246,0.2); }
+.xcard.theory .xcard-tag { background: rgba(16,185,129,0.1); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.18); }
+
+.xcard-arrow { font-size: 18px; color: var(--text3); transition: transform .2s, color .2s; }
+.xcard:hover .xcard-arrow { transform: translateX(4px); }
+.xcard.lab:hover .xcard-arrow { color: #60a5fa; }
+.xcard.theory:hover .xcard-arrow { color: #34d399; }
+
+/* ══════════════════════════════════════
+   SUBJECT PAGE
+══════════════════════════════════════ */
+#subjectPage { position: relative; }
+
+.sub-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(6,9,16,0.9);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.back-btn {
+  display: flex; align-items: center; gap: 7px;
+  background: var(--lift); border: 1px solid var(--border);
+  border-radius: var(--r-full); padding: 7px 16px;
+  color: var(--text); font-size: 13px; font-weight: 700;
+  font-family: var(--font); cursor: pointer;
+  transition: background .2s, border-color .2s;
+  white-space: nowrap;
+}
+.back-btn:hover { background: rgba(255,255,255,0.08); border-color: var(--border2); }
+.sub-nav-info { flex: 1; min-width: 0; }
+.sub-nav-code { font-family: var(--mono); font-size: 11px; color: var(--text3); }
+.sub-nav-name { font-size: 14px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* subject content */
+.sub-content {
+  position: relative;
+  z-index: 1;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 36px 20px 80px;
+}
+
+.sub-hero {
+  margin-bottom: 36px;
+  animation: cardIn .4s ease both;
+}
+.sub-type-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  border-radius: var(--r-full); padding: 6px 16px;
+  font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; margin-bottom: 14px;
+}
+.sub-type-badge.lab { background: rgba(59,130,246,0.1); color: #93c5fd; border: 1px solid rgba(59,130,246,0.2); }
+.sub-type-badge.theory { background: rgba(16,185,129,0.1); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.2); }
+
+.sub-big-title {
+  font-size: clamp(22px, 4vw, 34px);
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  color: #fff;
+  line-height: 1.2;
+  margin-bottom: 10px;
+}
+.sub-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+.sub-meta-chip {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--lift); border: 1px solid var(--border);
+  border-radius: var(--r-full); padding: 5px 13px;
+  font-size: 12px; color: var(--text2); font-weight: 500;
+}
+
+/* IQ editor */
+.iq-panel {
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  animation: cardIn .4s .1s ease both;
+}
+.iq-panel-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, var(--lift), var(--card));
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.iq-panel-title { font-size: 16px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 8px; }
+.iq-panel-title span { font-size: 20px; }
+.iq-panel-sub { font-size: 12px; color: var(--text2); margin-top: 2px; }
+
+.iq-toolbar {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.tool-btn {
+  padding: 6px 12px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  color: var(--text2);
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: all .15s;
+}
+.tool-btn:hover { background: rgba(255,255,255,0.1); color: var(--text); }
+
+.iq-editor-wrap { padding: 20px 24px; }
+.iq-textarea {
+  width: 100%;
+  min-height: 360px;
+  padding: 18px;
+  background: rgba(255,255,255,0.025);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: var(--r-md);
+  color: var(--text);
+  font-size: 14px;
+  font-family: var(--mono);
+  line-height: 1.8;
+  resize: vertical;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s, background .2s;
+}
+.iq-textarea:focus {
+  border-color: rgba(59,130,246,0.35);
+  background: rgba(59,130,246,0.03);
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.08);
+}
+.iq-textarea::placeholder { color: rgba(255,255,255,0.12); line-height: 1.8; }
+
+.iq-footer {
+  padding: 16px 24px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  background: rgba(0,0,0,0.15);
+}
+.iq-char-count { font-family: var(--mono); font-size: 12px; color: var(--text3); }
+.iq-btns { display: flex; gap: 8px; }
+
+.btn-danger {
+  padding: 10px 18px;
+  background: rgba(244,63,94,0.08);
+  border: 1px solid rgba(244,63,94,0.2);
+  border-radius: var(--r-md);
+  color: #fda4af;
+  font-size: 13px; font-weight: 700;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: all .15s;
+}
+.btn-danger:hover { background: rgba(244,63,94,0.15); }
+
+.btn-save {
+  padding: 10px 22px;
+  background: linear-gradient(135deg, #065f46, #10b981);
+  border: none;
+  border-radius: var(--r-md);
+  color: #fff;
+  font-size: 13px; font-weight: 800;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: all .2s;
+  box-shadow: 0 4px 14px rgba(16,185,129,0.3);
+  display: flex; align-items: center; gap: 6px;
+}
+.btn-save:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(16,185,129,0.4); }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed;
+  bottom: 28px; left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: linear-gradient(135deg, #064e3b, #065f46);
+  border: 1px solid rgba(16,185,129,0.3);
+  border-radius: var(--r-full);
+  padding: 12px 22px;
+  font-size: 13px; font-weight: 700;
+  color: #6ee7b7;
+  white-space: nowrap;
+  transition: transform .35s cubic-bezier(.34,1.56,.64,1);
+  z-index: 999;
+  pointer-events: none;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  display: flex; align-items: center; gap: 8px;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* ── LOADING ── */
+.loader-overlay {
+  position: fixed; inset: 0;
+  background: var(--bg);
+  z-index: 9999;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 16px;
+  transition: opacity .4s;
+}
+.loader-overlay.hide { opacity: 0; pointer-events: none; }
+.spinner {
+  width: 40px; height: 40px;
+  border: 3px solid var(--border);
+  border-top-color: var(--blue);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loader-text { font-size: 13px; color: var(--text2); font-weight: 600; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+  .auth-card { padding: 28px 20px; }
+  .f-row { grid-template-columns: 1fr; }
+  .nav { padding: 0 14px; }
+  .hero { padding: 36px 16px 28px; }
+  .content-wrap { padding: 0 14px 80px; }
+  .sub-content { padding: 24px 14px 80px; }
+  .xcard-name { font-size: 13px; }
+  .iq-panel-header { flex-direction: column; align-items: flex-start; }
+  .iq-toolbar { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- mesh background (global) -->
+<div class="mesh">
+  <div class="mesh-blob mb1"></div>
+  <div class="mesh-blob mb2"></div>
+  <div class="mesh-blob mb3"></div>
+</div>
+
+<!-- loader -->
+<div class="loader-overlay" id="loader">
+  <div class="spinner"></div>
+  <div class="loader-text">Loading EduPortal…</div>
+</div>
+
+<!-- ═══════════════════════════════════
+     PAGE 1 — SIGNUP
+═══════════════════════════════════ -->
+<div id="signupPage" class="page">
+  <div class="auth-wrap">
+    <div class="auth-brand">
+      <div class="brand-mark">
+        <div class="brand-icon">🎓</div>
+        <div class="brand-name">EduPortal</div>
+      </div>
+      <div class="auth-tagline">BCA IV Semester · Section D · May 2026</div>
+    </div>
+    <div class="auth-card">
+      <div class="auth-card-title">Create your account</div>
+      <div class="auth-card-sub">Gmail se sign up karo aur portal access karo</div>
+
+      <button class="gmail-btn" onclick="gmailSignup()">
+        <div class="gmail-icon">G</div>
+        Continue with Google / Gmail
+      </button>
+
+      <div class="divider-row">
+        <div class="divider-line"></div>
+        <div class="divider-text">Ya manually fill karo</div>
+        <div class="divider-line"></div>
+      </div>
+
+      <div class="f-row">
+        <div class="f-group">
+          <label class="f-label">First Name</label>
+          <div class="f-input-wrap">
+            <span class="f-icon">👤</span>
+            <input class="f-input" id="su_fname" type="text" placeholder="Rahul">
+          </div>
+        </div>
+        <div class="f-group">
+          <label class="f-label">Last Name</label>
+          <div class="f-input-wrap">
+            <span class="f-icon">👤</span>
+            <input class="f-input" id="su_lname" type="text" placeholder="Sharma">
+          </div>
+        </div>
+      </div>
+      <div class="f-group">
+        <label class="f-label">Gmail Address</label>
+        <div class="f-input-wrap">
+          <span class="f-icon">📧</span>
+          <input class="f-input" id="su_email" type="email" placeholder="yourname@gmail.com">
+        </div>
+      </div>
+      <div class="f-group">
+        <label class="f-label">Roll Number / Student ID</label>
+        <div class="f-input-wrap">
+          <span class="f-icon">🪪</span>
+          <input class="f-input" id="su_roll" type="text" placeholder="e.g. BCA22D001">
+        </div>
+      </div>
+      <div class="f-group">
+        <label class="f-label">Password</label>
+        <div class="f-input-wrap">
+          <span class="f-icon">🔒</span>
+          <input class="f-input" id="su_pass" type="password" placeholder="Min 6 characters">
+          <button class="f-eye" onclick="togglePass('su_pass',this)">👁</button>
+        </div>
+      </div>
+
+      <div class="auth-error" id="su_err"></div>
+      <div class="auth-success" id="su_ok"></div>
+
+      <button class="btn-primary" onclick="doSignup()">Create Account →</button>
+      <div class="auth-footer">
+        Pehle se account hai? <button class="auth-link" onclick="showPage('loginPage')">Login karo</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     PAGE 2 — LOGIN
+═══════════════════════════════════ -->
+<div id="loginPage" class="page">
+  <div class="auth-wrap">
+    <div class="auth-brand">
+      <div class="brand-mark">
+        <div class="brand-icon">🎓</div>
+        <div class="brand-name">EduPortal</div>
+      </div>
+      <div class="auth-tagline">BCA IV Semester · Section D · May 2026</div>
+    </div>
+    <div class="auth-card">
+      <div class="auth-card-title">Welcome back 👋</div>
+      <div class="auth-card-sub">Apne account mein login karo</div>
+
+      <button class="gmail-btn" onclick="gmailLogin()">
+        <div class="gmail-icon">G</div>
+        Continue with Google / Gmail
+      </button>
+
+      <div class="divider-row">
+        <div class="divider-line"></div>
+        <div class="divider-text">Ya email se login karo</div>
+        <div class="divider-line"></div>
+      </div>
+
+      <div class="f-group">
+        <label class="f-label">Gmail / Email</label>
+        <div class="f-input-wrap">
+          <span class="f-icon">📧</span>
+          <input class="f-input" id="li_email" type="email" placeholder="yourname@gmail.com">
+        </div>
+      </div>
+      <div class="f-group">
+        <label class="f-label">Password</label>
+        <div class="f-input-wrap">
+          <span class="f-icon">🔒</span>
+          <input class="f-input" id="li_pass" type="password" placeholder="Apna password">
+          <button class="f-eye" onclick="togglePass('li_pass',this)">👁</button>
+        </div>
+      </div>
+
+      <div class="auth-error" id="li_err"></div>
+
+      <button class="btn-primary" onclick="doLogin()">Login karo →</button>
+      <div class="auth-footer">
+        Account nahi hai? <button class="auth-link" onclick="showPage('signupPage')">Sign up karo</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     PAGE 3 — PORTAL (timetable)
+═══════════════════════════════════ -->
+<div id="portalPage" class="page">
+  <nav class="nav">
+    <div class="nav-brand">
+      <div class="nav-icon">🎓</div>
+      <div>
+        <div class="nav-title">EduPortal</div>
+        <div class="nav-sub">BCA IV · Sec D</div>
+      </div>
+    </div>
+    <div class="nav-right">
+      <div class="nav-user">
+        <div class="nav-avatar" id="navAvatar">S</div>
+        <div class="nav-uname" id="navName">Student</div>
+      </div>
+      <button class="nav-logout" onclick="doLogout()">↩ Logout</button>
+    </div>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-pill">May 2026 Examinations</div>
+    <div class="hero-title">
+      Section D <span class="hl">Exam</span> Timetable
+    </div>
+    <div class="hero-desc">
+      Har subject par click karo — Important Questions add karo aur kabhi bhi dekho
+    </div>
+    <div class="stats-row">
+      <div class="stat-chip">🔬 <span class="num">5</span> Lab Exams</div>
+      <div class="stat-chip">📖 <span class="num">4</span> Theory Exams</div>
+      <div class="stat-chip">📅 <span class="num">04–19</span> May 2026</div>
+    </div>
+  </div>
+
+  <div class="content-wrap">
+    <div class="sec-header">
+      <span class="sec-label lab">🔬 Lab / Practical Exams</span>
+      <div class="sec-line"></div>
+      <span class="sec-count">5 papers</span>
+    </div>
+    <div class="exam-grid" id="labGrid"></div>
+
+    <div class="sec-header">
+      <span class="sec-label theory">📖 Theory Exams</span>
+      <div class="sec-line"></div>
+      <span class="sec-count">4 papers</span>
+    </div>
+    <div class="exam-grid" id="theoryGrid"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     PAGE 4 — SUBJECT / IQ EDITOR
+═══════════════════════════════════ -->
+<div id="subjectPage" class="page">
+  <div class="sub-nav">
+    <button class="back-btn" onclick="goBack()">← Back</button>
+    <div class="sub-nav-info">
+      <div class="sub-nav-code" id="snCode">BCA-401</div>
+      <div class="sub-nav-name" id="snName">Subject Name</div>
+    </div>
+  </div>
+
+  <div class="sub-content">
+    <div class="sub-hero">
+      <div class="sub-type-badge" id="stBadge">Lab</div>
+      <div class="sub-big-title" id="stTitle">Subject Name</div>
+      <div class="sub-meta-row">
+        <div class="sub-meta-chip">📅 <span id="stDate">—</span></div>
+        <div class="sub-meta-chip">⏰ <span id="stTime">—</span></div>
+        <div class="sub-meta-chip">🪪 <span id="stCode2">—</span></div>
+      </div>
+    </div>
+
+    <div class="iq-panel">
+      <div class="iq-panel-header">
+        <div>
+          <div class="iq-panel-title"><span>⭐</span> Important Questions</div>
+          <div class="iq-panel-sub">Type karo ya paste karo — auto-save hota rehta hai</div>
+        </div>
+        <div class="iq-toolbar">
+          <button class="tool-btn" onclick="insertTemplate('q')">+ Question</button>
+          <button class="tool-btn" onclick="insertTemplate('unit')">+ Unit Heading</button>
+          <button class="tool-btn" onclick="insertTemplate('imp')">★ Important</button>
+          <button class="tool-btn" onclick="insertTemplate('note')">📝 Note</button>
+        </div>
+      </div>
+      <div class="iq-editor-wrap">
+        <textarea
+          class="iq-textarea"
+          id="iqEditor"
+          placeholder="Yahan important questions likhein...
+
+Q1. 
+Q2. 
+Q3. 
+
+━━━ UNIT 1 ━━━━━━━━━━━━━━━━━━
+★ Important topic...
+
+📝 Note: ..."></textarea>
+      </div>
+      <div class="iq-footer">
+        <div class="iq-char-count" id="charCount">0 characters</div>
+        <div class="iq-btns">
+          <button class="btn-danger" onclick="clearIQ()">🗑 Clear All</button>
+          <button class="btn-save" onclick="saveIQ()">💾 Save Questions</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- toast -->
+<div class="toast" id="toast">✅ Questions saved successfully!</div>
+
+<script>
+/* ═══════════════════════════════════════════
+   DATA
+═══════════════════════════════════════════ */
+const SUBJECTS = [
+  { id:'bca406', code:'BCA-406', name:'Java & Android Programming Lab',      date:'04', month:'May', day:'Monday',    time:'9:15 AM – 11:30 AM', type:'lab' },
+  { id:'bca404', code:'BCA-404', name:'Software Engineering Lab',            date:'05', month:'May', day:'Tuesday',   time:'9:15 AM – 11:30 AM', type:'lab' },
+  { id:'bca408', code:'BCA-408', name:'Python Programming',                  date:'06', month:'May', day:'Wednesday', time:'2:30 PM – 4:30 PM',   type:'lab' },
+  { id:'bca409', code:'BCA-409', name:'Personality Development Program-II',  date:'07', month:'May', day:'Thursday',  time:'9:15 AM – 11:15 AM', type:'lab' },
+  { id:'bca402', code:'BCA-402', name:'Design & Analysis of Algorithms Lab', date:'08', month:'May', day:'Friday',    time:'9:15 AM – 11:15 AM', type:'lab' },
+  { id:'bca401', code:'BCA-401', name:'Design & Analysis of Algorithms',     date:'12', month:'May', day:'Tuesday',   time:'10:00 AM – 1:00 PM',  type:'theory' },
+  { id:'bca403', code:'BCA-403', name:'Software Engineering',                date:'14', month:'May', day:'Thursday',  time:'10:00 AM – 1:00 PM',  type:'theory' },
+  { id:'bca405', code:'BCA-405', name:'Java & Android Programming',          date:'16', month:'May', day:'Saturday',  time:'10:00 AM – 1:00 PM',  type:'theory' },
+  { id:'bca407', code:'BCA-407', name:'Numerical Methods',                   date:'19', month:'May', day:'Tuesday',   time:'10:00 AM – 1:00 PM',  type:'theory' },
+];
+/* ═══════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════ */
+let currentUser = null;
+let currentSubId = null;
+let autoSaveTimer = null;
+
+/* ═══════════════════════════════════════════
+   STORAGE HELPERS
+═══════════════════════════════════════════ */
+function getUsers() { return JSON.parse(localStorage.getItem('ep_users') || '{}'); }
+function setUsers(u) { localStorage.setItem('ep_users', JSON.stringify(u)); }
+function getSession() { return JSON.parse(localStorage.getItem('ep_session') || 'null'); }
+function setSession(u) { localStorage.setItem('ep_session', JSON.stringify(u)); }
+function clearSession() { localStorage.removeItem('ep_session'); }
+function getIQ(email, subId) { return localStorage.getItem(`ep_iq_${email}_${subId}`) || ''; }
+function setIQ(email, subId, val) { localStorage.setItem(`ep_iq_${email}_${subId}`, val); }
+function removeIQ(email, subId) { localStorage.removeItem(`ep_iq_${email}_${subId}`); }
+
+/* ═══════════════════════════════════════════
+   PAGE NAVIGATION
+═══════════════════════════════════════════ */
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ═══════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════ */
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loader').classList.add('hide');
+    const session = getSession();
+    if (session) {
+      currentUser = session;
+      loadPortal();
+      showPage('portalPage');
+    } else {
+      showPage('loginPage');
+    }
+  }, 800);
+});
+
+/* ═══════════════════════════════════════════
+   AUTH
+═══════════════════════════════════════════ */
+function togglePass(id, btn) {
+  const el = document.getElementById(id);
+  if (el.type === 'password') { el.type = 'text'; btn.textContent = '🙈'; }
+  else { el.type = 'password'; btn.textContent = '👁'; }
+}
+
+function showErr(elId, msg) {
+  const el = document.getElementById(elId);
+  el.textContent = '⚠️ ' + msg;
+  el.classList.add('show');
+}
+function hideErr(elId) { document.getElementById(elId).classList.remove('show'); }
+function showOk(elId, msg) {
+  const el = document.getElementById(elId);
+  el.textContent = '✅ ' + msg;
+  el.classList.add('show');
+}
+
+// Gmail simulation — uses first part of "gmail" as name
+function gmailSignup() {
+  const name = prompt('Apna Gmail address enter karo:');
+  if (!name || !name.includes('@')) return;
+  const email = name.toLowerCase().trim();
+  if (!email.includes('gmail.com') && !email.includes('@')) {
+    alert('Valid Gmail address enter karo'); return;
+  }
+  const users = getUsers();
+  if (users[email]) {
+    alert('Yeh Gmail pehle se registered hai! Login karo.');
+    showPage('loginPage');
+    document.getElementById('li_email').value = email;
+    return;
+  }
+  const pass = prompt('Password set karo (min 6 chars):');
+  if (!pass || pass.length < 6) { alert('Password kam se kam 6 characters ka hona chahiye!'); return; }
+  const nameParts = email.split('@')[0].split('.');
+  const fullName = nameParts.map(n => n.charAt(0).toUpperCase() + n.slice(1)).join(' ');
+  users[email] = { email, password: btoa(pass), name: fullName, roll: 'BCA-SEC-D', created: Date.now() };
+  setUsers(users);
+  currentUser = users[email];
+  setSession(currentUser);
+  loadPortal();
+  showPage('portalPage');
+  showToast('🎉 Welcome, ' + fullName + '!');
+}
+
+function gmailLogin() {
+  const email = prompt('Apna Gmail address enter karo:');
+  if (!email) return;
+  const users = getUsers();
+  const eu = email.toLowerCase().trim();
+  if (!users[eu]) {
+    alert('Yeh Gmail registered nahi hai. Pehle sign up karo!');
+    showPage('signupPage');
+    return;
+  }
+  const pass = prompt('Password:');
+  if (atob(users[eu].password) !== pass) { alert('Galat password!'); return; }
+  currentUser = users[eu];
+  setSession(currentUser);
+  loadPortal();
+  showPage('portalPage');
+}
+
+function doSignup() {
+  hideErr('su_err');
+  const fname  = document.getElementById('su_fname').value.trim();
+  const lname  = document.getElementById('su_lname').value.trim();
+  const email  = document.getElementById('su_email').value.trim().toLowerCase();
+  const roll   = document.getElementById('su_roll').value.trim();
+  const pass   = document.getElementById('su_pass').value;
+
+  if (!fname)              return showErr('su_err', 'First name required hai');
+  if (!email || !email.includes('@')) return showErr('su_err', 'Valid email address daalo');
+  if (!pass || pass.length < 6) return showErr('su_err', 'Password kam se kam 6 characters ka hona chahiye');
+
+  const users = getUsers();
+  if (users[email]) return showErr('su_err', 'Yeh email already registered hai! Login karo.');
+
+  const newUser = {
+    email, password: btoa(pass),
+    name: (fname + ' ' + lname).trim(),
+    roll: roll || 'BCA-IV-D',
+    created: Date.now()
+  };
+  users[email] = newUser;
+  setUsers(users);
+
+  showOk('su_ok', 'Account ban gaya! Ab login karo...');
+  setTimeout(() => {
+    showPage('loginPage');
+    document.getElementById('li_email').value = email;
+  }, 1200);
+}
+
+function doLogin() {
+  hideErr('li_err');
+  const email = document.getElementById('li_email').value.trim().toLowerCase();
+  const pass  = document.getElementById('li_pass').value;
+
+  if (!email) return showErr('li_err', 'Email daalo');
+  if (!pass)  return showErr('li_err', 'Password daalo');
+
+  const users = getUsers();
+  if (!users[email]) return showErr('li_err', 'Yeh email registered nahi hai. Sign up karo!');
+  if (atob(users[email].password) !== pass) return showErr('li_err', 'Galat password!');
+
+  currentUser = users[email];
+  setSession(currentUser);
+  loadPortal();
+  showPage('portalPage');
+}
+
+function doLogout() {
+  if (!confirm('Logout karna chahte ho?')) return;
+  currentUser = null;
+  clearSession();
+  showPage('loginPage');
+  document.getElementById('li_email').value = '';
+  document.getElementById('li_pass').value = '';
+}
+
+// Enter key on login
+document.getElementById('li_pass').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+document.getElementById('su_pass').addEventListener('keydown', e => { if(e.key==='Enter') doSignup(); });
+
+/* ═══════════════════════════════════════════
+   PORTAL
+═══════════════════════════════════════════ */
+function loadPortal() {
+  if (!currentUser) return;
+  // set nav
+  const initials = currentUser.name.split(' ').map(n=>n[0]).join('').toUpperCase().slice(0,2);
+  document.getElementById('navAvatar').textContent = initials;
+  document.getElementById('navName').textContent = currentUser.name;
+  renderGrid();
+}
+
+function renderGrid() {
+  const labGrid    = document.getElementById('labGrid');
+  const theoryGrid = document.getElementById('theoryGrid');
+  labGrid.innerHTML = '';
+  theoryGrid.innerHTML = '';
+
+  SUBJECTS.forEach(s => {
+    const saved = getIQ(currentUser.email, s.id);
+    const hasSaved = saved.trim().length > 0;
+
+    const card = document.createElement('div');
+    card.className = `xcard ${s.type}`;
+    card.onclick = () => openSubject(s.id);
+    card.innerHTML = `
+      <div class="xcard-date">
+        <div class="xd-num">${s.date}</div>
+        <div class="xd-mo">${s.month}</div>
+        <div class="xd-day">${s.day}</div>
+      </div>
+      <div class="xcard-body">
+        <div class="xcard-info">
+          <div class="xcard-code">${s.code}</div>
+          <div class="xcard-name">${s.name}</div>
+          <div class="xcard-time">⏰ ${s.time}${hasSaved ? '<span class="xcard-saved">● Saved</span>' : ''}</div>
+        </div>
+        <div class="xcard-right">
+          <div class="xcard-tag">${s.type==='lab'?'Lab':'Theory'}</div>
+          <div class="xcard-arrow">›</div>
+        </div>
+      </div>`;
+    (s.type==='lab' ? labGrid : theoryGrid).appendChild(card);
+  });
+}
+
+/* ═══════════════════════════════════════════
+   SUBJECT PAGE
+═══════════════════════════════════════════ */
+function openSubject(id) {
+  const s = SUBJECTS.find(x => x.id === id);
+  currentSubId = id;
+
+  // nav
+  document.getElementById('snCode').textContent  = s.code;
+  document.getElementById('snName').textContent  = s.name;
+
+  // hero
+  const badge = document.getElementById('stBadge');
+  badge.className = `sub-type-badge ${s.type}`;
+  badge.textContent = s.type==='lab' ? '🔬 Lab / Practical Exam' : '📖 Theory Exam';
+  document.getElementById('stTitle').textContent  = s.name;
+  document.getElementById('stDate').textContent   = `${s.date} ${s.month} 2026 (${s.day})`;
+  document.getElementById('stTime').textContent   = s.time;
+  document.getElementById('stCode2').textContent  = s.code;
+
+  // load saved
+  const saved = getIQ(currentUser.email, id);
+  const editor = document.getElementById('iqEditor');
+  editor.value = saved;
+  updateCharCount();
+
+  showPage('subjectPage');
+}
+
+function goBack() {
+  renderGrid();
+  showPage('portalPage');
+}
+
+function updateCharCount() {
+  const len = document.getElementById('iqEditor').value.length;
+  document.getElementById('charCount').textContent = `${len.toLocaleString()} characters`;
+}
+
+// auto-save on type
+document.getElementById('iqEditor').addEventListener('input', () => {
+  updateCharCount();
+  clearTimeout(autoSaveTimer);
+  autoSaveTimer = setTimeout(() => {
+    if (currentSubId && currentUser) {
+      setIQ(currentUser.email, currentSubId, document.getElementById('iqEditor').value);
+    }
+  }, 800);
+});
+
+function saveIQ() {
+  if (!currentSubId || !currentUser) return;
+  setIQ(currentUser.email, currentSubId, document.getElementById('iqEditor').value);
+  showToast('💾 Questions saved!');
+}
+
+function clearIQ() {
+  if (!confirm('Sare questions delete karna chahte ho?')) return;
+  document.getElementById('iqEditor').value = '';
+  updateCharCount();
+  if (currentSubId && currentUser) removeIQ(currentUser.email, currentSubId);
+  showToast('🗑 Cleared!');
+}
+
+function insertTemplate(type) {
+  const editor = document.getElementById('iqEditor');
+  const pos = editor.selectionStart;
+  const templates = {
+    q:    '\nQ. \n',
+    unit: '\n━━━ UNIT  ━━━━━━━━━━━━━━━━━━━━━━━\n',
+    imp:  '\n★ [Important] ',
+    note: '\n📝 Note: ',
+  };
+  const t = templates[type] || '';
+  editor.value = editor.value.slice(0, pos) + t + editor.value.slice(pos);
+  editor.selectionStart = editor.selectionEnd = pos + t.length;
+  editor.focus();
+  updateCharCount();
+}
+
+/* ═══════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════ */
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+</script>
+</body>
+</html>
