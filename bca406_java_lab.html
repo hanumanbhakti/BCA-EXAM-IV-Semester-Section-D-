@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BCA-406 Java Lab | Exam Ready</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+  :root {
+    --bg: #0d0f14;
+    --card: #13161d;
+    --border: #1e2330;
+    --accent: #00e5ff;
+    --accent2: #7c3aed;
+    --green: #00ff88;
+    --yellow: #ffd600;
+    --text: #e8eaf0;
+    --muted: #6b7280;
+    --code-bg: #080a0e;
+    --out-bg: #001a0f;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(135deg, #0d0f14 0%, #13161d 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px;
+    backdrop-filter: blur(12px);
+  }
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.3rem; font-weight: 800;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+  }
+  .badge {
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    padding: 4px 14px; border-radius: 20px;
+    font-size: 0.75rem; font-weight: 700; color: white;
+    letter-spacing: 1px;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    text-align: center;
+    padding: 56px 24px 40px;
+    background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(0,229,255,0.07) 0%, transparent 70%);
+  }
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero p { color: var(--muted); font-size: 1rem; margin-bottom: 28px; }
+  .hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 22px; border-radius: 8px;
+    font-size: 0.9rem; font-weight: 600; cursor: pointer;
+    border: none; transition: all 0.2s;
+  }
+  .btn-primary {
+    background: var(--accent); color: #000;
+  }
+  .btn-primary:hover { background: #33eaff; transform: translateY(-2px); }
+  .btn-ghost {
+    background: transparent; color: var(--accent);
+    border: 1px solid var(--accent);
+  }
+  .btn-ghost:hover { background: rgba(0,229,255,0.08); }
+
+  /* ── STATS ── */
+  .stats {
+    display: flex; justify-content: center; gap: 40px;
+    padding: 0 24px 48px; flex-wrap: wrap;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem; font-weight: 800; color: var(--accent);
+    line-height: 1;
+  }
+  .stat-label { font-size: 0.75rem; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
+
+  /* ── SEARCH & FILTER ── */
+  .controls {
+    max-width: 900px; margin: 0 auto 32px;
+    padding: 0 24px;
+    display: flex; gap: 12px; flex-wrap: wrap;
+  }
+  .search-wrap {
+    flex: 1; min-width: 220px;
+    position: relative;
+  }
+  .search-wrap input {
+    width: 100%;
+    background: var(--card); border: 1px solid var(--border);
+    color: var(--text); border-radius: 8px;
+    padding: 10px 16px 10px 42px;
+    font-family: inherit; font-size: 0.9rem;
+    outline: none; transition: border-color 0.2s;
+  }
+  .search-wrap input:focus { border-color: var(--accent); }
+  .search-icon {
+    position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+    color: var(--muted); font-size: 1rem;
+  }
+  .filter-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+  .filter-btn {
+    padding: 8px 16px; border-radius: 6px;
+    border: 1px solid var(--border); background: var(--card);
+    color: var(--muted); font-size: 0.8rem; font-weight: 600;
+    cursor: pointer; transition: all 0.2s; font-family: inherit;
+  }
+  .filter-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(0,229,255,0.08); }
+
+  /* ── MAIN CONTENT ── */
+  main { max-width: 900px; margin: 0 auto; padding: 0 24px 80px; }
+
+  /* ── QUESTION CARD ── */
+  .q-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    animation: fadeUp 0.4s ease both;
+  }
+  .q-card:hover { border-color: rgba(0,229,255,0.3); box-shadow: 0 0 24px rgba(0,229,255,0.05); }
+
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(16px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+
+  .q-header {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    padding: 20px 20px 0; gap: 12px; cursor: pointer;
+  }
+  .q-left { display: flex; gap: 14px; align-items: flex-start; flex: 1; }
+  .q-num {
+    font-family: 'JetBrains Mono', monospace;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    color: white; font-size: 0.75rem; font-weight: 700;
+    padding: 4px 10px; border-radius: 6px; white-space: nowrap;
+    margin-top: 2px;
+  }
+  .q-title {
+    font-size: 1rem; font-weight: 600; color: var(--text); line-height: 1.5;
+  }
+  .q-tag {
+    font-size: 0.7rem; font-weight: 700; padding: 3px 10px;
+    border-radius: 20px; white-space: nowrap; margin-top: 4px;
+    display: inline-block;
+  }
+  .tag-terminal { background: rgba(0,255,136,0.12); color: var(--green); border: 1px solid rgba(0,255,136,0.2); }
+  .tag-gui { background: rgba(124,58,237,0.15); color: #a78bfa; border: 1px solid rgba(124,58,237,0.25); }
+  .tag-exception { background: rgba(255,214,0,0.1); color: var(--yellow); border: 1px solid rgba(255,214,0,0.2); }
+  .tag-io { background: rgba(0,229,255,0.1); color: var(--accent); border: 1px solid rgba(0,229,255,0.2); }
+
+  .q-controls { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+  .icon-btn {
+    background: transparent; border: 1px solid var(--border);
+    color: var(--muted); width: 34px; height: 34px; border-radius: 6px;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem; transition: all 0.2s;
+  }
+  .icon-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .chevron {
+    background: transparent; border: none; color: var(--muted);
+    cursor: pointer; font-size: 1.1rem; transition: transform 0.3s;
+    line-height: 1;
+  }
+  .chevron.open { transform: rotate(180deg); }
+
+  .q-body {
+    display: none; padding: 20px;
+  }
+  .q-body.open { display: block; }
+
+  /* Sections */
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; margin-bottom: 10px; margin-top: 20px;
+  }
+  .section-label:first-child { margin-top: 0; }
+  .label-code { color: var(--accent); }
+  .label-out { color: var(--green); }
+
+  /* Code block */
+  pre.code-block {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 8px;
+    padding: 16px;
+    overflow-x: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    line-height: 1.7;
+    color: #c9d1d9;
+    white-space: pre;
+  }
+
+  /* Syntax highlight */
+  .kw { color: #ff79c6; font-weight: 700; }
+  .cl { color: #8be9fd; }
+  .fn { color: #50fa7b; }
+  .str { color: #f1fa8c; }
+  .cm { color: #6272a4; font-style: italic; }
+  .num { color: #bd93f9; }
+
+  /* Output block */
+  pre.out-block {
+    background: var(--out-bg);
+    border: 1px solid rgba(0,255,136,0.2);
+    border-left: 3px solid var(--green);
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    line-height: 1.7;
+    color: var(--green);
+    white-space: pre-wrap;
+  }
+
+  /* PDF btn in card */
+  .pdf-row {
+    display: flex; justify-content: flex-end; margin-top: 16px;
+  }
+  .btn-pdf {
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    color: white; border: none; padding: 8px 20px;
+    border-radius: 6px; font-size: 0.82rem; font-weight: 700;
+    cursor: pointer; display: flex; align-items: center; gap: 6px;
+    transition: opacity 0.2s;
+  }
+  .btn-pdf:hover { opacity: 0.85; }
+
+  /* Download ALL section */
+  .dl-all {
+    background: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(0,229,255,0.08));
+    border: 1px solid rgba(124,58,237,0.3);
+    border-radius: 12px; padding: 28px;
+    text-align: center; margin-bottom: 36px;
+  }
+  .dl-all h2 { font-family: 'Syne', sans-serif; font-size: 1.4rem; margin-bottom: 8px; }
+  .dl-all p { color: var(--muted); font-size: 0.88rem; margin-bottom: 20px; }
+  .dl-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+  /* Progress bar */
+  .progress-bar {
+    height: 3px; background: linear-gradient(90deg, var(--accent2), var(--accent));
+    border-radius: 2px; margin-bottom: 24px; transition: width 0.3s;
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px;
+    background: var(--green); color: #000;
+    padding: 12px 20px; border-radius: 8px;
+    font-weight: 700; font-size: 0.88rem;
+    transform: translateY(80px); opacity: 0;
+    transition: all 0.3s; z-index: 999;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  /* No results */
+  .no-results { text-align: center; padding: 60px 20px; color: var(--muted); }
+  .no-results .emoji { font-size: 3rem; display: block; margin-bottom: 12px; }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  @media (max-width: 600px) {
+    .stats { gap: 24px; }
+    .q-title { font-size: 0.9rem; }
+    pre.code-block, pre.out-block { font-size: 0.72rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">☕ BCA-406 Lab</div>
+  <div class="badge">SEC D • EXAM READY</div>
+</header>
+
+<div class="hero">
+  <h1>Java Lab<br><span>Quick Revision</span></h1>
+  <p>BCA IV Semester • All 11 Programs • Code + Output + PDF Download</p>
+  <div class="hero-btns">
+    <button class="btn btn-primary" onclick="downloadAll()">⬇ Download All PDF</button>
+    <button class="btn btn-ghost" onclick="expandAll()">📖 Expand All</button>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stat"><div class="stat-num">11</div><div class="stat-label">Programs</div></div>
+  <div class="stat"><div class="stat-num">4</div><div class="stat-label">Topics</div></div>
+  <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Exam Ready</div></div>
+</div>
+
+<div class="controls">
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="Search programs..." oninput="filterCards()">
+  </div>
+  <div class="filter-btns">
+    <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
+    <button class="filter-btn" onclick="setFilter('terminal', this)">Terminal</button>
+    <button class="filter-btn" onclick="setFilter('gui', this)">GUI</button>
+    <button class="filter-btn" onclick="setFilter('exception', this)">Exception</button>
+    <button class="filter-btn" onclick="setFilter('io', this)">I/O</button>
+  </div>
+</div>
+
+<main>
+
+<div class="dl-all">
+  <h2>📦 Download Complete Lab PDF</h2>
+  <p>Sabhi 11 programs ek saath download karo — print karo, exam se pehle revise karo</p>
+  <div class="dl-btns">
+    <button class="btn btn-primary" onclick="downloadAll()">⬇ All 11 Programs PDF</button>
+    <button class="btn btn-ghost" onclick="downloadCheatsheet()">📋 Cheatsheet PDF</button>
+  </div>
+</div>
+
+<div id="cardContainer"></div>
+<div class="no-results" id="noResults" style="display:none">
+  <span class="emoji">🔎</span>
+  <p>Koi program nahi mila. Search change karo.</p>
+</div>
+
+</main>
+
+<div class="toast" id="toast">✅ PDF Download Ho Raha Hai...</div>
+
+<script>
+const programs = [
+  {
+    num: "Q1",
+    title: "Input Mechanisms — Command Line, Scanner & BufferedReader",
+    tag: "io", tagLabel: "I/O",
+    code: `import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+public class InputMechanisms {
+    public static void main(String[] args) throws Exception {
+        Scanner sc = new Scanner(System.in);
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int choice;
+
+        do {
+            System.out.println("\\nSelect Input Mechanism:");
+            System.out.println("1. Command Line Arguments");
+            System.out.println("2. Scanner Class");
+            System.out.println("3. BufferedReader Class");
+            System.out.println("4. Exit");
+            System.out.print("Enter your choice (1-4): ");
+            choice = sc.nextInt();
+
+            if (choice == 1) {
+                System.out.println("\\n--- Command Line Arguments ---");
+                System.out.print("Arguments: ");
+                for (String arg : args) System.out.print(arg + " ");
+                System.out.println();
+            } else if (choice == 2) {
+                System.out.println("\\n--- Scanner Class ---");
+                System.out.print("Enter your name: ");
+                String name = sc.next(); sc.nextLine();
+                System.out.print("Enter your age: ");
+                int age = sc.nextInt();
+                System.out.println("Name: " + name);
+                System.out.println("Age: " + age);
+            } else if (choice == 3) {
+                System.out.println("\\n--- BufferedReader Class ---");
+                System.out.print("Enter city name: ");
+                String city = br.readLine();
+                System.out.println("City: " + city);
+            } else if (choice == 4) {
+                System.out.println("Exiting program...");
+            }
+        } while (choice != 4);
+    }
+}`,
+    output: `java InputMechanisms Hello Roshan Bro!
+
+Select Input Mechanism:
+1. Command Line Arguments
+2. Scanner Class
+3. BufferedReader Class
+4. Exit
+Enter your choice (1-4): 1
+
+--- Command Line Arguments ---
+Arguments: Hello Roshan Bro!
+
+Enter your choice (1-4): 2
+
+--- Scanner Class ---
+Enter your name: Roshan Kumar
+Enter your age: 20
+Name: Roshan Kumar
+Age: 20
+
+Enter your choice (1-4): 3
+
+--- BufferedReader Class ---
+Enter city name: Ranchi
+City: Ranchi
+
+Enter your choice (1-4): 4
+Exiting program...`
+  },
+
+  {
+    num: "Q2",
+    title: "Smiley Face — AWT Graphics (drawOval, drawArc)",
+    tag: "gui", tagLabel: "GUI",
+    code: `import java.awt.*;
+
+public class SmileyFace extends Frame {
+
+    public void paint(Graphics g) {
+        // Face (yellow circle)
+        g.setColor(Color.YELLOW);
+        g.fillOval(100, 80, 250, 250);
+        g.setColor(Color.BLACK);
+        g.drawOval(100, 80, 250, 250);
+
+        // Left Eye
+        g.fillOval(155, 145, 30, 30);
+
+        // Right Eye
+        g.fillOval(265, 145, 30, 30);
+
+        // Smile
+        g.drawArc(155, 190, 140, 80, 200, 140);
+    }
+
+    public static void main(String[] args) {
+        SmileyFace f = new SmileyFace();
+        f.setTitle("Smiley Face");
+        f.setSize(460, 400);
+        f.setVisible(true);
+    }
+}`,
+    output: `[GUI Window Opens]
+Title: "Smiley Face"
+→ Yellow filled circle (face)
+→ Two black filled ovals (eyes)
+→ Black arc curve (smile)
+Result: A smiley face drawn using AWT Graphics`
+  },
+
+  {
+    num: "Q3",
+    title: "Stock Management System — Swing JTable + Login",
+    tag: "gui", tagLabel: "GUI",
+    code: `import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.awt.event.*;
+
+public class StockManagementSystem extends JFrame {
+    JTextField userField;
+    JPasswordField passField;
+    JTable table;
+
+    StockManagementSystem() {
+        setTitle("Stock Management System");
+        setSize(540, 380); setLayout(new BorderLayout());
+
+        // Table data
+        String[] cols = {"ID", "Name", "Quantity"};
+        Object[][] data = {
+            {"101", "Laptop", "10"},
+            {"102", "Mouse", "50"},
+            {"103", "Keyboard", "30"}
+        };
+        table = new JTable(new DefaultTableModel(data, cols));
+        JScrollPane sp = new JScrollPane(table);
+        add(sp, BorderLayout.CENTER);
+
+        // Show Stock button
+        JButton showBtn = new JButton("Show Stock");
+        add(showBtn, BorderLayout.NORTH);
+
+        // Login panel
+        JPanel loginPanel = new JPanel();
+        loginPanel.add(new JLabel("Username:"));
+        userField = new JTextField("Kundanmehta07", 12);
+        loginPanel.add(userField);
+        loginPanel.add(new JLabel("Password:"));
+        passField = new JPasswordField(12);
+        loginPanel.add(passField);
+        add(loginPanel, BorderLayout.SOUTH);
+
+        setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        new StockManagementSystem();
+    }
+}`,
+    output: `[GUI Window Opens]
+Title: "Stock Management System"
+
++-----+----------+----------+
+| ID  | Name     | Quantity |
++-----+----------+----------+
+| 101 | Laptop   |    10    |
+| 102 | Mouse    |    50    |
+| 103 | Keyboard |    30    |
++-----+----------+----------+
+
+Username: Kundanmehta07  Password: [••••••••••]
+[Show Stock] button at top`
+  },
+
+  {
+    num: "Q4",
+    title: "ExceptionDemo — try-catch (ArithmeticException)",
+    tag: "exception", tagLabel: "Exception",
+    code: `public class ExceptionDemo {
+    public static void main(String[] args) {
+        try {
+            int a = 10;
+            int b = 0;
+            int result = a / b;  // This causes exception
+            System.out.println("Result: " + result);
+        } catch (ArithmeticException e) {
+            System.out.println("Cannot divide by zero");
+        }
+    }
+}`,
+    output: `C:\\...\\java>javac ExceptionDemo.java
+C:\\...\\java>java ExceptionDemo
+Cannot divide by zero`
+  },
+
+  {
+    num: "Q5",
+    title: "Login UI — Swing JFrame with Username & Password",
+    tag: "gui", tagLabel: "GUI",
+    code: `import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class LoginUI extends JFrame implements ActionListener {
+    JTextField userField;
+    JPasswordField passField;
+    JButton loginBtn;
+
+    LoginUI() {
+        setTitle("Login");
+        setSize(440, 260);
+        setLayout(null);
+
+        JLabel userLabel = new JLabel("Username:");
+        userLabel.setBounds(40, 60, 100, 30);
+        add(userLabel);
+
+        userField = new JTextField();
+        userField.setBounds(150, 60, 200, 30);
+        add(userField);
+
+        JLabel passLabel = new JLabel("Password:");
+        passLabel.setBounds(40, 110, 100, 30);
+        add(passLabel);
+
+        passField = new JPasswordField();
+        passField.setBounds(150, 110, 200, 30);
+        add(passField);
+
+        loginBtn = new JButton("Login");
+        loginBtn.setBounds(165, 165, 100, 35);
+        loginBtn.addActionListener(this);
+        add(loginBtn);
+
+        setVisible(true);
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        String user = userField.getText();
+        String pass = new String(passField.getPassword());
+        if (user.equals("admin") && pass.equals("1234")) {
+            JOptionPane.showMessageDialog(this, "Login Successful!");
+        } else {
+            JOptionPane.showMessageDialog(this, "Invalid Credentials!");
+        }
+    }
+
+    public static void main(String[] args) {
+        new LoginUI();
+    }
+}`,
+    output: `[GUI Window Opens]
+Title: "Login"
+→ Username field (text box)
+→ Password field (password box)
+→ [Login] button
+
+On correct: "Login Successful!" dialog
+On wrong:   "Invalid Credentials!" dialog`
+  },
+
+  {
+    num: "Q6",
+    title: "AWT vs Swing — Comparing Button in Both Frameworks",
+    tag: "gui", tagLabel: "GUI",
+    code: `import java.awt.*;
+import javax.swing.*;
+
+// AWT Window
+class AWTWindow extends Frame {
+    AWTWindow() {
+        setTitle("AWT Button");
+        setSize(300, 220);
+        setLayout(new FlowLayout());
+        Button btn = new Button("AWT Button");
+        add(btn);
+        setVisible(true);
+    }
+}
+
+// Swing Window
+class SwingWindow extends JFrame {
+    SwingWindow() {
+        setTitle("Swing Button");
+        setSize(300, 220);
+        setLayout(new FlowLayout());
+        JButton btn = new JButton("Swing Button");
+        add(btn);
+        setVisible(true);
+    }
+}
+
+public class CompareGUI {
+    public static void main(String[] args) {
+        new AWTWindow();   // Opens AWT window
+        new SwingWindow(); // Opens Swing window
+    }
+}`,
+    output: `[Two GUI Windows Open Side by Side]
+
+Window 1 (AWT):
+  Title: "AWT Button"
+  → [AWT Button]  ← old/heavy style
+
+Window 2 (Swing):
+  Title: "Swing Button"
+  → [Swing Button] ← modern/lightweight style
+
+Difference: Swing is platform-independent & more modern than AWT`
+  },
+
+  {
+    num: "Q7",
+    title: "Custom Exception — User-defined Exception class",
+    tag: "exception", tagLabel: "Exception",
+    code: `// Custom Exception class
+class CustomException extends Exception {
+    CustomException(String message) {
+        super(message);
+    }
+}
+
+public class Test {
+    static void checkValue(int val) throws CustomException {
+        if (val < 0) {
+            throw new CustomException("Custom Exception Occurred");
+        }
+    }
+
+    public static void main(String[] args) {
+        try {
+            checkValue(-5);  // Negative value triggers exception
+        } catch (CustomException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+}`,
+    output: `C:\\...\\java>javac Test.java
+C:\\...\\java>java Test
+Custom Exception Occurred`
+  },
+
+  {
+    num: "Q8",
+    title: "FileDemo — Write & Read from a Text File",
+    tag: "io", tagLabel: "I/O",
+    code: `import java.io.*;
+
+public class FileDemo {
+    public static void main(String[] args) throws Exception {
+        // WRITE to file
+        FileWriter fw = new FileWriter("hello.txt");
+        fw.write("Hello Avinash");
+        fw.close();
+
+        // READ from file
+        FileReader fr = new FileReader("hello.txt");
+        BufferedReader br = new BufferedReader(fr);
+        String line = br.readLine();
+        System.out.println(line);
+        br.close();
+    }
+}`,
+    output: `C:\\...\\java>javac FileDemo.java
+C:\\...\\java>java FileDemo
+Hello Avinash`
+  },
+
+  {
+    num: "Q9",
+    title: "Layout Manager Demo — FlowLayout + GridLayout + BorderLayout",
+    tag: "gui", tagLabel: "GUI",
+    code: `import javax.swing.*;
+import java.awt.*;
+
+public class LayoutManagerDemo extends JFrame {
+
+    LayoutManagerDemo() {
+        setTitle("Layout Manager Demo");
+        setSize(540, 420);
+        setLayout(new BorderLayout());
+
+        // NORTH — FlowLayout (3 buttons in a row)
+        JPanel flowPanel = new JPanel(new FlowLayout());
+        flowPanel.add(new JButton("Flow 1"));
+        flowPanel.add(new JButton("Flow 2"));
+        flowPanel.add(new JButton("Flow 3"));
+        add(flowPanel, BorderLayout.NORTH);
+
+        // CENTER — GridLayout 2x2
+        JPanel gridPanel = new JPanel(new GridLayout(2, 2));
+        gridPanel.add(new JLabel("Grid 1", SwingConstants.CENTER));
+        gridPanel.add(new JLabel("Grid 2", SwingConstants.CENTER));
+        gridPanel.add(new JLabel("Grid 3", SwingConstants.CENTER));
+        gridPanel.add(new JLabel("Grid 4", SwingConstants.CENTER));
+        add(gridPanel, BorderLayout.CENTER);
+
+        // SOUTH — OK & Cancel buttons
+        JPanel southPanel = new JPanel(new FlowLayout());
+        southPanel.add(new JButton("OK"));
+        southPanel.add(new JButton("Cancel"));
+        add(southPanel, BorderLayout.SOUTH);
+
+        setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        new LayoutManagerDemo();
+    }
+}`,
+    output: `[GUI Window Opens]
+Title: "Layout Manager Demo"
+
+[ Flow 1 ] [ Flow 2 ] [ Flow 3 ]   ← FlowLayout (North)
++----------+----------+
+|  Grid 1  |  Grid 2  |
++----------+----------+             ← GridLayout 2x2 (Center)
+|  Grid 3  |  Grid 4  |
++----------+----------+
+      [ OK ] [ Cancel ]             ← FlowLayout (South)`
+  },
+
+  {
+    num: "Q10",
+    title: "Inheritance — Animal → Dog (Method Overriding)",
+    tag: "terminal", tagLabel: "Terminal",
+    code: `// Parent class
+class Animal {
+    void eat() {
+        System.out.println("Dog eats food");
+    }
+}
+
+// Child class inherits Animal
+class Dog extends Animal {
+    void bark() {
+        System.out.println("Dog barks");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Dog d = new Dog();
+        d.bark();  // Child method
+        d.eat();   // Parent method (inherited)
+    }
+}`,
+    output: `C:\\...\\java>javac Main.java
+C:\\...\\java>java Main
+Dog barks
+Dog eats food`
+  },
+
+  {
+    num: "Q11",
+    title: "ExceptionDemo v2 — Multiple catch blocks",
+    tag: "exception", tagLabel: "Exception",
+    code: `public class ExceptionDemo {
+    public static void main(String[] args) {
+        try {
+            int[] arr = new int[5];
+            int a = 10, b = 0;
+
+            // Uncomment one line at a time to test different exceptions:
+            int result = a / b;           // ArithmeticException
+            // arr[10] = 5;               // ArrayIndexOutOfBoundsException
+            // String s = null; s.length(); // NullPointerException
+
+            System.out.println("Result: " + result);
+
+        } catch (ArithmeticException e) {
+            System.out.println("Cannot divide by zero");
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("Array index out of range");
+        } catch (Exception e) {
+            System.out.println("General Exception: " + e.getMessage());
+        } finally {
+            System.out.println("Finally block always runs");
+        }
+    }
+}`,
+    output: `C:\\...\\java>javac ExceptionDemo.java
+C:\\...\\java>java ExceptionDemo
+Cannot divide by zero
+Finally block always runs`
+  }
+];
+
+let currentFilter = 'all';
+
+function renderCards(list) {
+  const container = document.getElementById('cardContainer');
+  const noResults = document.getElementById('noResults');
+  if (list.length === 0) {
+    container.innerHTML = '';
+    noResults.style.display = 'block';
+    return;
+  }
+  noResults.style.display = 'none';
+  container.innerHTML = list.map((p, i) => `
+    <div class="q-card" data-tag="${p.tag}" style="animation-delay:${i*0.05}s">
+      <div class="q-header" onclick="toggleCard(${i})">
+        <div class="q-left">
+          <span class="q-num">${p.num}</span>
+          <div>
+            <div class="q-title">${p.title}</div>
+            <span class="q-tag tag-${p.tag}">${p.tagLabel}</span>
+          </div>
+        </div>
+        <div class="q-controls">
+          <button class="icon-btn" title="Copy Code" onclick="copyCode(event,${i})">📋</button>
+          <button class="icon-btn" title="Download PDF" onclick="downloadOne(event,${i})">⬇</button>
+          <button class="chevron" id="chev-${i}">▼</button>
+        </div>
+      </div>
+      <div class="q-body" id="body-${i}">
+        <div class="section-label label-code">// JAVA CODE</div>
+        <pre class="code-block">${escHtml(p.code)}</pre>
+        <div class="section-label label-out">// OUTPUT</div>
+        <pre class="out-block">${escHtml(p.output)}</pre>
+        <div class="pdf-row">
+          <button class="btn-pdf" onclick="downloadOne(event,${i})">⬇ Download This as PDF</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function escHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function toggleCard(i) {
+  const body = document.getElementById('body-'+i);
+  const chev = document.getElementById('chev-'+i);
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chev.classList.toggle('open', !isOpen);
+}
+
+function expandAll() {
+  programs.forEach((_,i) => {
+    document.getElementById('body-'+i)?.classList.add('open');
+    document.getElementById('chev-'+i)?.classList.add('open');
+  });
+}
+
+function setFilter(tag, btn) {
+  currentFilter = tag;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilter();
+}
+
+function applyFilter() {
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const list = programs.filter(p => {
+    const matchTag = currentFilter === 'all' || p.tag === currentFilter;
+    const matchSearch = p.title.toLowerCase().includes(search) || p.num.toLowerCase().includes(search);
+    return matchTag && matchSearch;
+  });
+  renderCards(list);
+}
+
+function filterCards() { applyFilter(); }
+
+function copyCode(e, i) {
+  e.stopPropagation();
+  navigator.clipboard.writeText(programs[i].code).then(() => showToast('✅ Code Copied!'));
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function downloadOne(e, i) {
+  e.stopPropagation();
+  const p = programs[i];
+  const content = `
+    <div style="font-family:monospace; background:#0d0f14; color:#e8eaf0; padding:30px; min-height:100vh;">
+      <div style="border-bottom:2px solid #00e5ff; padding-bottom:12px; margin-bottom:20px;">
+        <span style="background:linear-gradient(90deg,#7c3aed,#00e5ff);color:white;padding:4px 12px;border-radius:6px;font-size:13px;font-weight:bold;">${p.num}</span>
+        <span style="font-size:16px; font-weight:bold; margin-left:12px; color:#e8eaf0;">${p.title}</span>
+      </div>
+      <div style="color:#00e5ff;font-size:11px;letter-spacing:2px;margin-bottom:8px;">// JAVA CODE</div>
+      <pre style="background:#080a0e;border:1px solid #1e2330;border-left:3px solid #00e5ff;border-radius:8px;padding:16px;font-size:12px;line-height:1.7;color:#c9d1d9;overflow:visible;white-space:pre-wrap;">${escHtml(p.code)}</pre>
+      <div style="color:#00ff88;font-size:11px;letter-spacing:2px;margin:16px 0 8px;">// OUTPUT</div>
+      <pre style="background:#001a0f;border:1px solid rgba(0,255,136,0.2);border-left:3px solid #00ff88;border-radius:8px;padding:14px;font-size:13px;line-height:1.7;color:#00ff88;white-space:pre-wrap;">${escHtml(p.output)}</pre>
+      <div style="margin-top:20px;text-align:center;color:#6b7280;font-size:11px;">BCA-406 Java Lab • Sec D • Exam Ready</div>
+    </div>
+  `;
+  const el = document.createElement('div');
+  el.innerHTML = content;
+  document.body.appendChild(el);
+  html2pdf().set({
+    margin: 0,
+    filename: `BCA406_${p.num}_${p.title.split(' ')[0]}.pdf`,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2, backgroundColor: '#0d0f14' },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  }).from(el).save().then(() => {
+    document.body.removeChild(el);
+    showToast('✅ PDF Download Ho Gaya!');
+  });
+}
+
+function downloadAll() {
+  showToast('⏳ Saare Programs PDF Ban Rahe Hain...');
+  let html = `
+    <div style="font-family:monospace;background:#0d0f14;color:#e8eaf0;padding:30px;">
+      <div style="text-align:center;border-bottom:2px solid #00e5ff;padding-bottom:20px;margin-bottom:30px;">
+        <div style="font-size:28px;font-weight:900;background:linear-gradient(90deg,#00e5ff,#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">BCA-406 Java Lab</div>
+        <div style="color:#6b7280;margin-top:6px;font-size:13px;">BCA IV Semester • Section D • All 11 Programs</div>
+      </div>
+  `;
+  programs.forEach(p => {
+    html += `
+      <div style="margin-bottom:32px; page-break-inside:avoid;">
+        <div style="border-bottom:1px solid #1e2330;padding-bottom:10px;margin-bottom:14px;">
+          <span style="background:linear-gradient(90deg,#7c3aed,#00e5ff);color:white;padding:3px 10px;border-radius:6px;font-size:12px;font-weight:bold;">${p.num}</span>
+          <span style="font-size:14px;font-weight:bold;margin-left:10px;color:#e8eaf0;">${p.title}</span>
+        </div>
+        <div style="color:#00e5ff;font-size:10px;letter-spacing:2px;margin-bottom:6px;">// JAVA CODE</div>
+        <pre style="background:#080a0e;border-left:3px solid #00e5ff;padding:12px;font-size:10px;line-height:1.6;color:#c9d1d9;white-space:pre-wrap;border-radius:6px;">${escHtml(p.code)}</pre>
+        <div style="color:#00ff88;font-size:10px;letter-spacing:2px;margin:10px 0 6px;">// OUTPUT</div>
+        <pre style="background:#001a0f;border-left:3px solid #00ff88;padding:10px;font-size:11px;line-height:1.6;color:#00ff88;white-space:pre-wrap;border-radius:6px;">${escHtml(p.output)}</pre>
+      </div>
+    `;
+  });
+  html += `<div style="text-align:center;color:#6b7280;font-size:10px;margin-top:20px;border-top:1px solid #1e2330;padding-top:12px;">BCA-406 Java & Android Programming Lab • Exam Ready</div></div>`;
+  const el = document.createElement('div');
+  el.innerHTML = html;
+  document.body.appendChild(el);
+  html2pdf().set({
+    margin: 0,
+    filename: 'BCA406_Java_Lab_All_Programs.pdf',
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2, backgroundColor: '#0d0f14' },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  }).from(el).save().then(() => {
+    document.body.removeChild(el);
+    showToast('✅ All Programs PDF Ready!');
+  });
+}
+
+function downloadCheatsheet() {
+  showToast('⏳ Cheatsheet Ban Rahi Hai...');
+  let html = `
+    <div style="font-family:monospace;background:#0d0f14;color:#e8eaf0;padding:24px;">
+      <div style="text-align:center;margin-bottom:20px;">
+        <div style="font-size:22px;font-weight:900;color:#00e5ff;">BCA-406 Java Lab — Cheatsheet</div>
+        <div style="color:#6b7280;font-size:11px;">Key Concepts & Quick Reference</div>
+      </div>
+      <table style="width:100%;border-collapse:collapse;">
+        <tr style="background:#1e2330;">
+          <th style="padding:8px;color:#00e5ff;text-align:left;font-size:12px;">Program</th>
+          <th style="padding:8px;color:#00e5ff;text-align:left;font-size:12px;">Key Class/Concept</th>
+          <th style="padding:8px;color:#00e5ff;text-align:left;font-size:12px;">Output</th>
+        </tr>
+  `;
+  const rows = [
+    ["Q1 InputMechanisms","Scanner, BufferedReader, args[]","Menu-driven input demo"],
+    ["Q2 SmileyFace","AWT Graphics, fillOval, drawArc","Yellow smiley face window"],
+    ["Q3 StockMgmt","JTable, JScrollPane, JPasswordField","Table with login panel"],
+    ["Q4 ExceptionDemo","try-catch, ArithmeticException","Cannot divide by zero"],
+    ["Q5 LoginUI","JTextField, JPasswordField, JButton","Login form window"],
+    ["Q6 CompareGUI","java.awt vs javax.swing","Two windows (AWT + Swing)"],
+    ["Q7 CustomException","extends Exception, throw","Custom Exception Occurred"],
+    ["Q8 FileDemo","FileWriter, FileReader, BufferedReader","Hello Avinash"],
+    ["Q9 LayoutManager","FlowLayout, GridLayout, BorderLayout","3-section GUI window"],
+    ["Q10 Inheritance","extends, method override","Dog barks / Dog eats food"],
+    ["Q11 MultiCatch","multiple catch, finally block","Cannot divide by zero + finally"],
+  ];
+  rows.forEach((r,i) => {
+    const bg = i%2===0 ? '#13161d' : '#0d0f14';
+    html += `<tr style="background:${bg};">
+      <td style="padding:7px 8px;font-size:11px;color:#a78bfa;font-weight:bold;">${r[0]}</td>
+      <td style="padding:7px 8px;font-size:10px;color:#c9d1d9;">${r[1]}</td>
+      <td style="padding:7px 8px;font-size:10px;color:#00ff88;">${r[2]}</td>
+    </tr>`;
+  });
+  html += `</table><div style="margin-top:16px;text-align:center;color:#6b7280;font-size:10px;">BCA-406 • Sec D • Exam Quick Reference</div></div>`;
+  const el = document.createElement('div');
+  el.innerHTML = html;
+  document.body.appendChild(el);
+  html2pdf().set({
+    margin: 0,
+    filename: 'BCA406_Cheatsheet.pdf',
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2, backgroundColor: '#0d0f14' },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+  }).from(el).save().then(() => {
+    document.body.removeChild(el);
+    showToast('✅ Cheatsheet Ready!');
+  });
+}
+
+// Init
+renderCards(programs);
+</script>
+</body>
+</html>
